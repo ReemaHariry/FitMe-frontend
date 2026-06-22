@@ -5,7 +5,7 @@
  */
 
 import { useState } from "react";
-import { Heart, Clock, AlertCircle, Play, X, CheckCircle, ChevronRight } from "lucide-react";
+import { Clock, AlertCircle, Play, X, ChevronRight } from "lucide-react";
 import { pregnancyWorkouts, PregnancyCategory, PregnancyExercise } from "../../data/pregnancyWorkouts";
 
 export function PregnancyWorkoutZone() {
@@ -197,8 +197,6 @@ function PregnancyWorkoutCard({
   trimesterColor,
   onStartWorkout,
 }: PregnancyWorkoutCardProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
-
   const displayedExercises = category.exercises.slice(0, 3);
   const remainingCount = category.exercises.length - 3;
 
@@ -209,21 +207,6 @@ function PregnancyWorkoutCard({
         borderColor: `${trimesterColor}30`,
       }}
     >
-      {/* Favorite Heart */}
-      <button
-        onClick={() => setIsFavorite(!isFavorite)}
-        className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-        aria-label="Toggle favorite"
-      >
-        <Heart
-          className={`w-5 h-5 ${
-            isFavorite
-              ? "fill-rose-500 text-rose-500"
-              : "text-gray-400 dark:text-gray-500"
-          }`}
-        />
-      </button>
-
       {/* Emoji Icon */}
       <div
         className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-4"
@@ -307,20 +290,6 @@ function PregnancyWorkoutModal({
   onClose,
   onExerciseClick,
 }: PregnancyWorkoutModalProps) {
-  const handleMarkCompleted = () => {
-    const history = JSON.parse(
-      localStorage.getItem("fitapp_workout_history") || "[]"
-    );
-    history.push({
-      workoutId: workout.id,
-      completedAt: new Date().toISOString(),
-      title: workout.name,
-      type: "pregnancy",
-    });
-    localStorage.setItem("fitapp_workout_history", JSON.stringify(history));
-    onClose();
-  };
-
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
@@ -485,22 +454,12 @@ function PregnancyWorkoutModal({
           </div>
 
           {/* Footer */}
-          <div className="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-6 flex gap-3">
+          <div className="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-6">
             <button
               onClick={onClose}
-              className="flex-1 py-3 rounded-xl font-semibold bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+              className="w-full py-3 rounded-xl font-semibold bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
             >
               Close
-            </button>
-            <button
-              onClick={handleMarkCompleted}
-              className="flex-1 py-3 rounded-xl font-semibold text-white transition-all hover:shadow-lg flex items-center justify-center gap-2"
-              style={{
-                backgroundColor: trimesterColor,
-              }}
-            >
-              <CheckCircle className="w-5 h-5" />
-              Mark as Completed
             </button>
           </div>
         </div>
